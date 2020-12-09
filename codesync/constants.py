@@ -14,12 +14,12 @@
 #    under the License.
 
 GIT_DIR = "git/"
-REMOTE_PATH = "/opt/stack/"
+REMOTE_PATH = "~/git"
 
 SSH_USER = "stack"
 RSYNC_BINARY = "rsync"
 
 # Excludes list composed with the kind help of John Schwarz: https://github.com/jschwarz89
-RSYNC_ARGS = ("-v -r --exclude=.tox --exclude=.idea --exclude=*.pyc "
-              "--exclude=*.pyo --exclude=*~ --exclude=.*.swp --exclude=.*.swo "
-              "-azh --progress --delete")
+RSYNC_ARGS = ("-v -r -azh --progress --delete")
+
+RSYNC_EXCLUDE = ['.tox', '.idea', '.pyc', '.pyo', '.swp', '.swo', '.git', '.iml', 'target', 'build', '__pycache__']

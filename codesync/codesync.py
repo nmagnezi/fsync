@@ -31,15 +31,20 @@ def process_args():
     parser.add_argument(
         '-p', '--project',
         required=True,
-        help='The name of your local git project, stored under your default '
-             'path. Default: {}{}'
-             .format(helpers.get_git_directory_path(), '<project>')
+        help='The name of your git project, stored under your'
+             'local/remote path.'
     )
     parser.add_argument(
-        '-f', '--folder',
+        '-r', '--remote',
         required=False,
         default=constants.REMOTE_PATH,
         help='Remote git folder. Default: {} '.format(constants.REMOTE_PATH)
+    )
+    parser.add_argument(
+        '-l', '--local',
+        required=False,
+        default=helpers.get_git_directory_path(),
+        help='Local git folder. Default: {} '.format(helpers.get_git_directory_path())
     )
     parser.add_argument(
         '-d', '--direction',
@@ -57,7 +62,15 @@ def process_args():
     parser.add_argument(
         '-i', '--ip',
         required=True,
-        help='IP Address for ssh connection'
+        help='IP Address of FQDN for ssh connection'
+    )
+    parser.add_argument(
+        '-e', '--exclude',
+        required=False,
+        nargs='*',
+        type=str,
+        default=constants.RSYNC_EXCLUDE,
+        help='Exclude list for rsync. Default: {} '.format(constants.RSYNC_EXCLUDE)
     )
     return parser.parse_args()
 
@@ -66,19 +79,20 @@ def main():
     rsync = helpers.get_rsync_path()
     args = process_args()
     local = helpers.get_git_directory_path()
-    remote = "".join([args.user, '@', args.ip, ':', args.folder])
+    remote = "".join([args.user, '@', args.ip, ':', args.remote])
+    rsync_args = constants.RSYNC_ARGS + helpers.get_rsync_exclude(args.exclude)
     if args.direction == 'to':
         cmd = " ".join([rsync,
-                        constants.RSYNC_ARGS,
+                        rsync_args,
                         path.join(local, args.project),
                         remote])
     else:
         cmd = " ".join([rsync,
-                        constants.RSYNC_ARGS,
-                        "".join([remote, args.project]),
+                        rsync_args,
+                        path.join(remote, args.project),
                         local])
 
-    print "Executing: " + "".join(cmd)
+    print("Executing: " + "".join(cmd))
     call(cmd.split())
 
 

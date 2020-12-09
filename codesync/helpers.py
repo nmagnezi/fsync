@@ -31,3 +31,6 @@ def get_rsync_path():
         raise RuntimeError('rsync is not installed, cannot continue. '
                            'Please install rsync and try again.')
     return rsync
+
+def get_rsync_exclude(exclude):
+    return "".join([" --exclude " + e for e in exclude])
