@@ -11,24 +11,32 @@ remote machine.
 
 ##### positional arguments:
       -p PROJECT, --project PROJECT
-                            The name of your local git project, stored under your
-                            default path. Default: /Users/nmagnezi/git/<project>
+                            The name of your git project, stored under your
+                            local/remote path.
 
       -d {to,from}, --direction {to,from}
                             Sync Direction
     
-      -i IP, --ip IP        IP Address for SSH connection
+      -i IP, --ip IP        IP Address or FQDN for SSH connection
 
 
 ##### optional arguments:
-      -f FOLDER, --folder FOLDER
-                            Remote git folder. Default: /opt/stack/
+      -r REMOTE, --remote REMOTE
+                            Remote git folder. Default: ~/git
+
+      -l LOCAL, --local LOCAL
+                            Local git folder. Default: ~/git
     
       -u USER, --user USER  Username for ssh connection. Default: stack
 
+      -e [EXCLUDE [EXCLUDE ...]], --exclude [EXCLUDE [EXCLUDE ...]]
+                            Exclude list for rsync. Default: ['.tox', '.idea',
+                            '.pyc', '.pyo', '.swp', '.swo', '.git', '.iml',
+                            'target', 'build', '__pycache__']
+
 ## Usage Example
 
-    codesync -p octavia -d to -i 10.35.6.107 -f /my/path -u blah
+    codesync -p myproject -d from -i 10.35.6.107 -u nmagnezi -r /Users/nmagnezi/git -l ~/git -e .git .tox
 
 ## How does it work?
 
